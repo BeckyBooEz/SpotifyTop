@@ -1,55 +1,92 @@
 const contenedor = document.getElementById("contenedor");
 
+function crearParrafo(titulo, valor) {
+  const p = document.createElement("p");
+  p.innerHTML = `<strong>${titulo}:</strong> ${valor}`;
+  return p;
+}
+
 function crearTarjeta(cancion) {
   const tarjeta = document.createElement("div");
   tarjeta.classList.add("tarjeta");
 
-  tarjeta.innerHTML = `
-    <img src="${cancion["Portada Spotify"]}" alt="Portada de ${cancion["Canción"]}">
-    <h3>${cancion["Canción"]}</h3>
-    <p><strong>Artista:</strong> ${cancion["Artista"]}</p>
-    <p><strong>Álbum:</strong> ${cancion["Álbum"]}</p>
-    <p><strong>Fecha de Lanzamiento:</strong> ${cancion["Fecha de Lanzamiento"]}</p>
+  const imagen = document.createElement("img");
+  imagen.src = "images/Foto-Flores.png";
+  imagen.alt = `Portada de ${cancion["Canción"]}`;
+  imagen.loading = "lazy";
+  tarjeta.appendChild(imagen);
 
-    <hr style="margin: 10px 0; border-color: #333;">
+  const realImage = new Image();
+  realImage.onload = () => {
+    imagen.src = cancion["Portada Spotify"];
+  };
+  realImage.onerror = () => {
+    console.warn(`Imagen no cargó: ${cancion["Portada Spotify"]}`);
+  };
+  realImage.src = cancion["Portada Spotify"];
 
-    <p><strong>Reproducciones Totales:</strong> ${cancion["Reproducciones Totales"].toLocaleString()}</p>
-    <p><strong>Minutos Reproducidos:</strong> ${cancion["Minutos Reproducidos"].toFixed(2)} min</p>
-    <p><strong>Duración:</strong> ${cancion["Duración (min)"]} min</p>
-    <p><strong>Popularidad:</strong> ${cancion["Popularidad"]} / 100</p>
+  const titulo = document.createElement("h3");
+  titulo.textContent = cancion["Canción"];
 
-    <a href="${cancion["Spotify Link"]}" target="_blank" title="Escuchar ${cancion["Canción"]} en Spotify">
-      Escuchar en Spotify
-    </a>
-  `;
+  const artista = crearParrafo("Artista", cancion["Artista"]);
+  const album = crearParrafo("Álbum", cancion["Álbum"]);
+  const fecha = crearParrafo("Fecha de Lanzamiento", cancion["Fecha de Lanzamiento"]);
+
+  const hr = document.createElement("hr");
+  hr.style.margin = "10px 0";
+  hr.style.borderColor = "#333";
+
+  const repros = crearParrafo("Reproducciones Totales", cancion["Reproducciones Totales"].toLocaleString());
+  const minutos = crearParrafo("Minutos Reproducidos", `${cancion["Minutos Reproducidos"].toFixed(2)} min`);
+  const duracion = crearParrafo("Duración", `${cancion["Duración (min)"]} min`);
+  const popu = crearParrafo("Popularidad", `${cancion["Popularidad"]} / 100`);
+
+  const enlace = document.createElement("a");
+  enlace.href = cancion["Spotify Link"];
+  enlace.target = "_blank";
+  enlace.title = `Escuchar ${cancion["Canción"]} en Spotify`;
+  enlace.textContent = "Escuchar en Spotify";
+
+  tarjeta.appendChild(titulo);
+  tarjeta.appendChild(artista);
+  tarjeta.appendChild(album);
+  tarjeta.appendChild(fecha);
+  tarjeta.appendChild(hr);
+  tarjeta.appendChild(repros);
+  tarjeta.appendChild(minutos);
+  tarjeta.appendChild(duracion);
+  tarjeta.appendChild(popu);
+  tarjeta.appendChild(enlace);
 
   return tarjeta;
 }
 
-function cargarCanciones() {
-  fetch('PreferenciasDatos.json')
-    .then(res => {
-      if (!res.ok) throw new Error("No se pudo cargar el archivo JSON.");
-      return res.json();
-    })
-    .then(data => {
-      const cancionesFiltradas = data
-        .filter(c => 
-          c["Reproducciones Totales"] > 30 &&
-          c["Minutos Reproducidos"] > 120
-          )
-        .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
+async function cargarCanciones() {
+  try {
+    const respuesta = await fetch('PreferenciasDatos.json');
 
-      cancionesFiltradas.forEach(cancion => {
-        const tarjeta = crearTarjeta(cancion);
-        contenedor.appendChild(tarjeta);
-});
+    if (!respuesta.ok) {
+      throw new Error("No se pudo cargar el archivo JSON.");
+    }
 
-    })
-    .catch(error => {
-      console.error("Hubo un error al cargar los datos:", error);
-      contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
+    const data = await respuesta.json();
+
+    const cancionesFiltradas = data
+      .filter(c =>
+        c["Reproducciones Totales"] > 30 &&
+        c["Minutos Reproducidos"] > 30
+      )
+      .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
+
+    cancionesFiltradas.forEach(cancion => {
+      const tarjeta = crearTarjeta(cancion);
+      contenedor.appendChild(tarjeta);
     });
+
+  } catch (error) {
+    console.error("Hubo un error al cargar los datos:", error);
+    contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
+  }
 }
 
 cargarCanciones();
