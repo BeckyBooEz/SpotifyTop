@@ -1,4 +1,9 @@
 const contenedor = document.getElementById("contenedor");
+const buscador = document.getElementById("buscador");
+const filtroReproducciones = document.getElementById("filtroReproducciones");
+const filtroMinutos = document.getElementById("filtroMinutos");
+
+let cancionesCargadas = [];
 
 function crearParrafo(titulo, valor) {
   const p = document.createElement("p");
@@ -73,6 +78,20 @@ function crearTarjeta(cancion) {
   return tarjeta;
 }
 
+function mostrarCanciones(lista) {
+  contenedor.innerHTML = "";
+
+  if (lista.length === 0) {
+    contenedor.innerHTML = `<p style="text-align:center; color:gray;">No se encontraron canciones con esos filtros.</p>`;
+    return;
+  }
+
+  lista.forEach(cancion => {
+    const tarjeta = crearTarjeta(cancion);
+    contenedor.appendChild(tarjeta);
+  });
+}
+
 async function cargarCanciones() {
   try {
     const respuesta = await fetch('PreferenciasDatos.json');
@@ -83,22 +102,43 @@ async function cargarCanciones() {
 
     const data = await respuesta.json();
 
-    const cancionesFiltradas = data
+    cancionesCargadas = data
       .filter(c =>
         c["Reproducciones Totales"] > 30 &&
         c["Minutos Reproducidos"] > 30
       )
       .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
 
-    cancionesFiltradas.forEach(cancion => {
-      const tarjeta = crearTarjeta(cancion);
-      contenedor.appendChild(tarjeta);
-    });
+      mostrarCanciones(cancionesCargadas);
 
   } catch (error) {
     console.error("Hubo un error al cargar los datos:", error);
     contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
   }
-}
+};
+
+function aplicarFiltros() {
+  const texto = buscador.value.toLowerCase();
+  const minReproducciones = parseInt(filtroReproducciones.value) || 0;
+  const minMinutos = parseFloat(filtroMinutos.value) || 0;
+
+  const filtradas = cancionesCargadas.filter(cancion => {
+    const coincideTexto =
+      cancion["Canción"].toLowerCase().includes(texto) ||
+      cancion["Artista"].toLowerCase().includes(texto) ||
+      cancion["Álbum"].toLowerCase().includes(texto);
+
+    const cumpleReproducciones = cancion["Reproducciones Totales"] >= minReproducciones;
+    const cumpleMinutos = cancion["Minutos Reproducidos"] >= minMinutos;
+
+    return coincideTexto && cumpleReproducciones && cumpleMinutos;
+  });
+
+  mostrarCanciones(filtradas);
+};
+
+buscador.addEventListener("input", aplicarFiltros);
+filtroReproducciones.addEventListener("input", aplicarFiltros);
+filtroMinutos.addEventListener("input", aplicarFiltros);
 
 cargarCanciones();

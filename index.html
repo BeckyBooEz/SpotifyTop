@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Preferencias Musicales</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <h1>Mis Canciones Top</h1>
+  <div id="filtros">
+  <input type="text" id="buscador" placeholder="Buscar canción, artista o álbum">
+  <input type="number" id="filtroReproducciones" placeholder="Mínimo de reproducciones">
+  <input type="number" id="filtroMinutos" placeholder="Mínimo de minutos reproducidos">
+</div>
   <div id="contenedor"></div>
   <script src="app.js"></script>
 </body>
+
 </html>
