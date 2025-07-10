@@ -13,12 +13,24 @@ function crearTarjeta(cancion) {
   const imagen = document.createElement("img");
   imagen.src = "images/Foto-Flores.png";
   imagen.alt = `Portada de ${cancion["Canción"]}`;
-  imagen.loading = "lazy";
+  imagen.style.transition = "opacity 0.5s ease";
   tarjeta.appendChild(imagen);
 
   const realImage = new Image();
+  realImage.src = cancion["Portada Spotify"];
+
   realImage.onload = () => {
-    imagen.src = cancion["Portada Spotify"];
+    imagen.style.transition = "opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease";
+    imagen.style.opacity = "0";
+    imagen.style.transform = "scale(1.1)";
+    imagen.style.filter = "blur(4px)";
+
+    setTimeout(() => {
+      imagen.src = realImage.src;
+      imagen.style.opacity = "1";
+      imagen.style.transform = "scale(1)";
+      imagen.style.filter = "blur(0)";
+    }, 500);
   };
   realImage.onerror = () => {
     console.warn(`Imagen no cargó: ${cancion["Portada Spotify"]}`);
