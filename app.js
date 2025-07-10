@@ -104,8 +104,8 @@ async function cargarCanciones() {
 
     cancionesCargadas = data
       .filter(c =>
-        c["Reproducciones Totales"] > 30 &&
-        c["Minutos Reproducidos"] > 30
+        c["Reproducciones Totales"] >= 0 &&
+        c["Minutos Reproducidos"] >= 0
       )
       .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
 
@@ -128,12 +128,11 @@ function aplicarFiltros() {
       cancion["Artista"].toLowerCase().includes(texto) ||
       cancion["Álbum"].toLowerCase().includes(texto);
 
-    const cumpleReproducciones = cancion["Reproducciones Totales"] >= minReproducciones;
-    const cumpleMinutos = cancion["Minutos Reproducidos"] >= minMinutos;
-
+    const cumpleReproducciones = cancion["Reproducciones Totales"] <= minReproducciones;
+    const cumpleMinutos = cancion["Minutos Reproducidos"] <= minMinutos;
+    
     return coincideTexto && cumpleReproducciones && cumpleMinutos;
   });
-
   mostrarCanciones(filtradas);
 };
 

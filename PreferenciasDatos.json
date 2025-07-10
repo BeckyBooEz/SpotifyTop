@@ -55986,7 +55986,7 @@
         "Spotify Link": "https://open.spotify.com/track/1Bqxj0aH5KewYHKUg1IdrF"
     },
     {
-        "Artista": "Galaxy Demon",
+        "Artista": "Null",
         "Canción": "VIDA DE ROCK",
         "Reproducciones Totales": 1,
         "Horas Reproducidas": 0.0,
@@ -56211,13 +56211,13 @@
     },
     {
         "Artista": "Midel",
-        "Canción": "Pocima",
+        "Canción": "Null",
         "Reproducciones Totales": 1,
         "Horas Reproducidas": 0.0,
         "Minutos Reproducidos": 0.02,
         "Milisegundos Reproducidos": 946,
         "Portada Spotify": "https://i.scdn.co/image/ab67616d0000b2734595d99114ccf1b5b21ac5a2",
-        "Álbum": "Pocima",
+        "Álbum": "Null",
         "Fecha de Lanzamiento": "2021-02-19",
         "Duración (min)": 2.27,
         "Popularidad": 0,
@@ -57440,20 +57440,6 @@
         "Duración (min)": 2.82,
         "Popularidad": 40,
         "Spotify Link": "https://open.spotify.com/track/1RnLxfh0cg4D2PxKixfuk5"
-    },
-    {
-        "Artista": "Nicolás Macchiarulo",
-        "Canción": "Chico Estrella X Malbec - Piano Cover",
-        "Reproducciones Totales": 1,
-        "Horas Reproducidas": 0.0,
-        "Minutos Reproducidos": 0.09,
-        "Milisegundos Reproducidos": 5183,
-        "Portada Spotify": "https://i.scdn.co/image/ab67616d0000b273c20f1849388467d97fa02d34",
-        "Álbum": "Trap/Urbano Argentino Piano Covers - Vol.1",
-        "Fecha de Lanzamiento": "2024-08-10",
-        "Duración (min)": 4.07,
-        "Popularidad": 0,
-        "Spotify Link": "https://open.spotify.com/track/1ySSDScC3YbBjNRcfWZy3d"
     },
     {
         "Artista": "Nio Garcia",
@@ -59792,33 +59778,5 @@
         "Duración (min)": 4.84,
         "Popularidad": 78,
         "Spotify Link": "https://open.spotify.com/track/34rRFl0bz9PocxWuO2ca5J"
-    },
-    {
-        "Artista": "Alta Consigna",
-        "Canción": "Culpable Tú",
-        "Reproducciones Totales": 1,
-        "Horas Reproducidas": 0.0,
-        "Minutos Reproducidos": 0.01,
-        "Milisegundos Reproducidos": 460,
-        "Portada Spotify": "https://i.scdn.co/image/ab67616d0000b27388200be8763c9b28771fd542",
-        "Álbum": "Culpable Tú",
-        "Fecha de Lanzamiento": "2023-04-02",
-        "Duración (min)": 3.86,
-        "Popularidad": 74,
-        "Spotify Link": "https://open.spotify.com/track/2KGzDt4jfP39i8INV4rpdO"
-    },
-    {
-        "Artista": "Alu Mix",
-        "Canción": "Ñero Session 23",
-        "Reproducciones Totales": 1,
-        "Horas Reproducidas": 0.0,
-        "Minutos Reproducidos": 0.24,
-        "Milisegundos Reproducidos": 14280,
-        "Portada Spotify": "https://i.scdn.co/image/ab67616d0000b273a3c58d13d523034c490f41af",
-        "Álbum": "Ñero Session 23",
-        "Fecha de Lanzamiento": "2024-07-10",
-        "Duración (min)": 2.74,
-        "Popularidad": 67,
-        "Spotify Link": "https://open.spotify.com/track/5dmrKfJd5roTYwH5YfOg7G"
     }
 ]
