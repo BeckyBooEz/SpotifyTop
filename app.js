@@ -86,6 +86,17 @@ function mostrarCanciones(lista) {
     return;
   }
 
+  if (lista.length === 1) {
+    const cancion = lista[0];
+    const link = cancion["Spotify Link"];
+    const nombre = cancion["Canción"];
+
+    if (link && link.includes("track/")) {
+      const id = link.split("track/")[1].split("?")[0];
+      console.log(`Filtro único: "${nombre}", ID de Track: ${id}`);
+    }
+  }
+
   lista.forEach(cancion => {
     const tarjeta = crearTarjeta(cancion);
     contenedor.appendChild(tarjeta);
@@ -125,7 +136,7 @@ function aplicarFiltros() {
 
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('./base/DataFull.json');
+    const respuesta = await fetch('./base/DataOutliersCore.json');
 
     if (!respuesta.ok) {
       throw new Error("No se pudo cargar el archivo JSON.");
