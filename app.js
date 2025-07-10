@@ -37,10 +37,10 @@ function crearTarjeta(cancion) {
       imagen.style.filter = "blur(0)";
     }, 500);
   };
+
   realImage.onerror = () => {
     console.warn(`Imagen no cargó: ${cancion["Portada Spotify"]}`);
   };
-  realImage.src = cancion["Portada Spotify"];
 
   const titulo = document.createElement("h3");
   titulo.textContent = cancion["Canción"];
@@ -92,15 +92,47 @@ function mostrarCanciones(lista) {
   });
 }
 
+function actualizarLimitesDinamicos(lista) {
+  if (lista.length === 0) return;
+
+  const maxRepro = Math.max(...lista.map(c => c["Reproducciones Totales"]));
+  const maxMinutos = Math.max(...lista.map(c => c["Minutos Reproducidos"]));
+
+  filtroReproducciones.max = maxRepro;
+  filtroMinutos.max = maxMinutos.toFixed(2);
+}
+
+function aplicarFiltros() {
+  const texto = buscador.value.toLowerCase();
+  const minReproducciones = filtroReproducciones.value === "" ? null : parseInt(filtroReproducciones.value);
+  const minMinutos = filtroMinutos.value === "" ? null : parseFloat(filtroMinutos.value);
+
+  const filtradas = cancionesCargadas.filter(cancion => {
+    const coincideTexto =
+      cancion["Canción"].toLowerCase().includes(texto) ||
+      cancion["Artista"].toLowerCase().includes(texto) ||
+      cancion["Álbum"].toLowerCase().includes(texto);
+
+    const cumpleReproducciones = minReproducciones === null || cancion["Reproducciones Totales"] >= minReproducciones;
+    const cumpleMinutos = minMinutos === null || cancion["Minutos Reproducidos"] >= minMinutos;
+
+    return coincideTexto && cumpleReproducciones && cumpleMinutos;
+  });
+
+  mostrarCanciones(filtradas);
+  actualizarLimitesDinamicos(filtradas);
+}
+
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('PreferenciasDatos.json');
+    const respuesta = await fetch('./base/DataFull.json');
 
     if (!respuesta.ok) {
       throw new Error("No se pudo cargar el archivo JSON.");
     }
 
     const data = await respuesta.json();
+    console.log(data.length);
 
     cancionesCargadas = data
       .filter(c =>
@@ -109,35 +141,61 @@ async function cargarCanciones() {
       )
       .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
 
-      mostrarCanciones(cancionesCargadas);
-
+    mostrarCanciones(cancionesCargadas);
+    actualizarLimitesDinamicos(cancionesCargadas);
   } catch (error) {
     console.error("Hubo un error al cargar los datos:", error);
     contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
   }
-};
-
-function aplicarFiltros() {
-  const texto = buscador.value.toLowerCase();
-  const minReproducciones = parseInt(filtroReproducciones.value) || 0;
-  const minMinutos = parseFloat(filtroMinutos.value) || 0;
-
-  const filtradas = cancionesCargadas.filter(cancion => {
-    const coincideTexto =
-      cancion["Canción"].toLowerCase().includes(texto) ||
-      cancion["Artista"].toLowerCase().includes(texto) ||
-      cancion["Álbum"].toLowerCase().includes(texto);
-
-    const cumpleReproducciones = cancion["Reproducciones Totales"] <= minReproducciones;
-    const cumpleMinutos = cancion["Minutos Reproducidos"] <= minMinutos;
-    
-    return coincideTexto && cumpleReproducciones && cumpleMinutos;
-  });
-  mostrarCanciones(filtradas);
-};
+}
 
 buscador.addEventListener("input", aplicarFiltros);
-filtroReproducciones.addEventListener("input", aplicarFiltros);
-filtroMinutos.addEventListener("input", aplicarFiltros);
+
+filtroReproducciones.addEventListener("input", () => {
+  let valor = filtroReproducciones.value;
+  if (valor === "") {
+    aplicarFiltros();
+    return;
+  }
+
+  valor = parseInt(valor);
+  const max = parseInt(filtroReproducciones.max);
+  if (isNaN(valor) || valor < 0) valor = 0;
+  if (valor > max) valor = max;
+  filtroReproducciones.value = Math.round(valor);
+  aplicarFiltros();
+});
+
+filtroMinutos.addEventListener("input", () => {
+  let valorTexto = filtroMinutos.value;
+
+  if (valorTexto === "") {
+    aplicarFiltros();
+    return;
+  }
+
+  let valor = parseFloat(valorTexto);
+  const max = parseFloat(filtroMinutos.max);
+
+  if (isNaN(valor) || valor < 0) {
+    filtroMinutos.value = "";
+    aplicarFiltros();
+    return;
+  }
+
+  if (valor > max) {
+    valor = max;
+    filtroMinutos.value = valor.toString();
+  } else {
+
+    const partes = valorTexto.split(".");
+    if (partes.length === 2 && partes[1].length > 2) {
+      valor = Math.round(valor * 100) / 100;
+      filtroMinutos.value = valor.toString();
+    }
+  }
+
+  aplicarFiltros();
+});
 
 cargarCanciones();
