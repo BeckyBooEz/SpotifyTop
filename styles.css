@@ -4,58 +4,83 @@
   padding: 0;
 }
 
-html,
 body {
+  background-color: #121212;
+  color: white;
   font-family: sans-serif;
-  margin: 0;
-  padding: 0;
   overflow-x: hidden;
   width: 100vw;
 }
 
-body {
-  background-color: #121212;
-  color: white;
-  font-family: Arial, sans-serif;
+body::-webkit-scrollbar {
+  display: none;
 }
 
-h1 {
+.header{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.header img{
+  width: 30%;
+  padding: 10px 20px;
+  text-align: start;
+}
+
+.header p{
+  width: 40%;
   text-align: center;
-  margin: 20px 0;
+
+}
+
+.header h1{
+  width: 30%;
+  padding: 10px 20px;
+  text-align: end;
 }
 
 #filtros {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   margin: 20px;
+  padding: 10px;
   gap: 10px;
 }
 
 input[type="text"],
 input[type="number"] {
-  background-color: #1e1e1e;
-  color: #fff;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin: 10px;
-  width: 280px;
-  font-size: 14px;
-  transition: border 0.3s, box-shadow 0.3s;
+  background-color: #181818; 
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  height: 40px;
+  font-size: 16px;
   text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  width: 30%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
 }
 
 input[type="text"]::placeholder,
 input[type="number"]::placeholder {
-  color: #888;
+  color: #aaaaaa;
+}
+
+input[type="text"]:hover,
+input[type="number"]:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus {
   outline: none;
-  border-color: #1DB954;
-  box-shadow: 0 0 5px #1DB95488;
+  background-color: #222222;
+  box-shadow: 0 0 0 2px #1db954;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -68,17 +93,17 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+
 #contenedor {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
   padding: 20px;
   width: 100%;
-  gap: 30px;
 }
 
 .tarjeta {
-  width: calc(33.33% - 30px);
+  width: 100%;
   background-color: #181818;
   border-radius: 15px;
   padding: 15px;
