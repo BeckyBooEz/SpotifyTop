@@ -136,7 +136,7 @@ function aplicarFiltros() {
 
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('./base/DataOutliersCore.json');
+    const respuesta = await fetch('./base/DataFull.json');
 
     if (!respuesta.ok) {
       throw new Error("No se pudo cargar el archivo JSON.");
