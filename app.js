@@ -82,9 +82,7 @@ function mostrarCanciones(lista) {
   contenedor.innerHTML = "";
 
   if (lista.length === 0) {
-    contenedor.innerHTML = `<p style="text-align:center; color:gray;">No se encontraron canciones con esos filtros.</p>`;
-    contenedor.style.display = "flex"
-    contenedor.style.justifyContent = "center"
+    contenedor.innerHTML = `<p class="mensaje-sin-resultados">No se encontraron canciones con esos filtros.</p>`;
     return;
   }
 

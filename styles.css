@@ -16,29 +16,27 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.header{
+.header {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-}
-
-.header img{
-  width: 30%;
+  justify-content: space-between;
+  gap: 20px;
   padding: 10px 20px;
-  text-align: start;
+  flex-wrap: wrap;
 }
 
-.header p{
-  width: 40%;
+.header img,
+.header p,
+.header h1 {
+  flex: 1 1 200px; 
+  max-width: 300px;
   text-align: center;
-
 }
 
-.header h1{
-  width: 30%;
-  padding: 10px 20px;
-  text-align: end;
+.header img {
+  max-height: 60px;
+  object-fit: contain;
 }
 
 #filtros {
@@ -48,6 +46,13 @@ body::-webkit-scrollbar {
   margin: 20px;
   padding: 10px;
   gap: 10px;
+}
+
+#filtros input[type="text"],
+#filtros input[type="number"] {
+  flex: 1 1 250px;
+  min-width: 200px;
+  max-width: 100%;
 }
 
 input[type="text"],
@@ -93,13 +98,18 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-
 #contenedor {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   padding: 20px;
   width: 100%;
+}
+
+.mensaje-sin-resultados {
+  color: rgb(37, 151, 122);
+  text-align: center;
+  grid-column: 1/-1;
 }
 
 .tarjeta {
