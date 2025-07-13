@@ -83,6 +83,8 @@ function mostrarCanciones(lista) {
 
   if (lista.length === 0) {
     contenedor.innerHTML = `<p style="text-align:center; color:gray;">No se encontraron canciones con esos filtros.</p>`;
+    contenedor.style.display = "flex"
+    contenedor.style.justifyContent = "center"
     return;
   }
 
@@ -136,7 +138,7 @@ function aplicarFiltros() {
 
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('./base/DataFull.json');
+    const respuesta = await fetch('./base/DataCore.json');
 
     if (!respuesta.ok) {
       throw new Error("No se pudo cargar el archivo JSON.");
