@@ -143,7 +143,6 @@ async function cargarCanciones() {
     }
 
     const data = await respuesta.json();
-    console.log(data.length);
 
     cancionesCargadas = data
       .filter(c =>
