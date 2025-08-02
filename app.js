@@ -5,42 +5,69 @@ const filtroMinutos = document.getElementById("filtroMinutos");
 
 let cancionesCargadas = [];
 
-function crearParrafo(titulo, valor) {
-  const p = document.createElement("p");
-  p.innerHTML = `<strong>${titulo}:</strong> ${valor}`;
-  return p;
-}
+async function cargarCanciones() {
+  try {
+    const respuesta = await fetch('./base/DataCore.json');
+
+    if (!respuesta.ok) {
+      throw new Error(`Error http: ${respuesta.status}`);
+    }
+
+    const data = await respuesta.json();
+
+    cancionesCargadas = data;
+
+    mostrarCanciones(cancionesCargadas);
+    actualizarLimitesDinamicos(cancionesCargadas);
+  } catch (error) {
+    console.error("Hubo un error al cargar los datos:", error);
+    contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
+  }
+};
+
+function mostrarCanciones(lista) {
+  contenedor.innerHTML = "";
+
+  /* Largo de la lista es 0, No hay resultados en la lista. */
+  if (lista.length === 0) {
+    contenedor.innerHTML = `<p class="mensaje-sin-resultados">No se encontraron canciones con esos filtros.</p>`;
+    return;
+  }
+  
+  const contador = document.getElementById("contador")
+  contador.innerHTML = "";
+  const resumen = document.createElement("p");
+  resumen.textContent = `Mostrando ${lista.length} canciones`;
+  resumen.classList.add("resumen-canciones");
+  contador.appendChild(resumen);
+
+  /* Largo de la lista es 1, Agarrar el objeto. */
+  if (lista.length === 1) {
+    const cancion = lista[0];
+    const link = cancion["Spotify Link"];
+    const nombre = cancion["Canción"];
+
+    /* Si existe link, y en el link esta la palabra "track/" y sacar el id del link  */
+    if (link && link.includes("track/")) {
+      const id = link.split("track/")[1].split("?")[0];
+      console.log(`Filtro único: "${nombre}", ID de Track: ${id}`);
+    }
+  }
+
+  lista.forEach(cancion => {
+    const tarjeta = crearTarjeta(cancion);
+    contenedor.appendChild(tarjeta);
+  });
+};
 
 function crearTarjeta(cancion) {
   const tarjeta = document.createElement("div");
   tarjeta.classList.add("tarjeta");
 
   const imagen = document.createElement("img");
-  imagen.src = "images/Foto-Flores.png";
+  imagen.src = cancion["Portada Spotify"];
   imagen.alt = `Portada de ${cancion["Canción"]}`;
-  imagen.style.transition = "opacity 0.5s ease";
   tarjeta.appendChild(imagen);
-
-  const realImage = new Image();
-  realImage.src = cancion["Portada Spotify"];
-
-  realImage.onload = () => {
-    imagen.style.transition = "opacity 0.5s ease, transform 0.5s ease, filter 0.5s ease";
-    imagen.style.opacity = "0";
-    imagen.style.transform = "scale(1.1)";
-    imagen.style.filter = "blur(4px)";
-
-    setTimeout(() => {
-      imagen.src = realImage.src;
-      imagen.style.opacity = "1";
-      imagen.style.transform = "scale(1)";
-      imagen.style.filter = "blur(0)";
-    }, 500);
-  };
-
-  realImage.onerror = () => {
-    console.warn(`Imagen no cargó: ${cancion["Portada Spotify"]}`);
-  };
 
   const titulo = document.createElement("h3");
   titulo.textContent = cancion["Canción"];
@@ -78,30 +105,11 @@ function crearTarjeta(cancion) {
   return tarjeta;
 }
 
-function mostrarCanciones(lista) {
-  contenedor.innerHTML = "";
-
-  if (lista.length === 0) {
-    contenedor.innerHTML = `<p class="mensaje-sin-resultados">No se encontraron canciones con esos filtros.</p>`;
-    return;
-  }
-
-  if (lista.length === 1) {
-    const cancion = lista[0];
-    const link = cancion["Spotify Link"];
-    const nombre = cancion["Canción"];
-
-    if (link && link.includes("track/")) {
-      const id = link.split("track/")[1].split("?")[0];
-      console.log(`Filtro único: "${nombre}", ID de Track: ${id}`);
-    }
-  }
-
-  lista.forEach(cancion => {
-    const tarjeta = crearTarjeta(cancion);
-    contenedor.appendChild(tarjeta);
-  });
-}
+function crearParrafo(titulo, valor) {
+  const p = document.createElement("p");
+  p.innerHTML = `<strong>${titulo}:</strong> ${valor}`;
+  return p;
+};
 
 function actualizarLimitesDinamicos(lista) {
   if (lista.length === 0) return;
@@ -132,31 +140,6 @@ function aplicarFiltros() {
 
   mostrarCanciones(filtradas);
   actualizarLimitesDinamicos(filtradas);
-}
-
-async function cargarCanciones() {
-  try {
-    const respuesta = await fetch('./base/DataCore.json');
-
-    if (!respuesta.ok) {
-      throw new Error("No se pudo cargar el archivo JSON.");
-    }
-
-    const data = await respuesta.json();
-
-    cancionesCargadas = data
-      .filter(c =>
-        c["Reproducciones Totales"] >= 0 &&
-        c["Minutos Reproducidos"] >= 0
-      )
-      .sort((a, b) => b["Popularidad"] - a["Popularidad"]);
-
-    mostrarCanciones(cancionesCargadas);
-    actualizarLimitesDinamicos(cancionesCargadas);
-  } catch (error) {
-    console.error("Hubo un error al cargar los datos:", error);
-    contenedor.innerHTML = `<p style="color:red; text-align:center;">No se pudo cargar la información de las canciones.</p>`;
-  }
 }
 
 buscador.addEventListener("input", aplicarFiltros);
