@@ -26,6 +26,10 @@ body::-webkit-scrollbar {
   flex-wrap: wrap;
 }
 
+.header p, h1 {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
 .header img,
 .header p,
 .header h1 {
@@ -96,6 +100,10 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
+}
+
+#contador{
+  font-size: clamp(1rem, 4vw, 2rem);
 }
 
 #contenedor {
