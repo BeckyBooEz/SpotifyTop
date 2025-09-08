@@ -26,14 +26,15 @@ body::-webkit-scrollbar {
   flex-wrap: wrap;
 }
 
-.header p, h1 {
+.header p,
+h1 {
   font-size: clamp(1.5rem, 4vw, 3rem);
 }
 
 .header img,
 .header p,
 .header h1 {
-  flex: 1 1 200px; 
+  flex: 1 1 200px;
   max-width: 300px;
   text-align: center;
 }
@@ -61,7 +62,7 @@ body::-webkit-scrollbar {
 
 input[type="text"],
 input[type="number"] {
-  background-color: #181818; 
+  background-color: #181818;
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -69,9 +70,9 @@ input[type="number"] {
   height: 40px;
   font-size: 16px;
   text-align: center;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   width: 30%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
 }
 
@@ -102,8 +103,20 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-#contador{
+#data {
+  font-size: clamp(.5rem, 2vw, 1rem);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  align-items: center;
+}
+
+#contador {
   font-size: clamp(1rem, 4vw, 2rem);
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 
 #contenedor {

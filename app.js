@@ -5,6 +5,7 @@ const filtroMinutos = document.getElementById("filtroMinutos");
 
 let cancionesCargadas = [];
 
+
 async function cargarCanciones() {
   try {
     const respuesta = await fetch('./base/DataFull.json');
@@ -16,6 +17,8 @@ async function cargarCanciones() {
     const data = await respuesta.json();
 
     cancionesCargadas = data;
+    baseUsada = respuesta.url.split("/").pop();
+    console.log(baseUsada)
 
     mostrarCanciones(cancionesCargadas);
     actualizarLimitesDinamicos(cancionesCargadas);
@@ -25,29 +28,62 @@ async function cargarCanciones() {
   }
 };
 
+let baseUsada = ""
+
+async function renderizar() {
+  async function contarDatos(a) {
+    try {
+      const respuestaData = await fetch(`./base/${a}`);
+      if (!respuestaData.ok) {
+        throw new Error(`Error http: ${respuestaData.status}`);
+      }
+      const data = await respuestaData.json();
+      return `Total de ${data.length} canciones en ${a}`;
+    } catch (error) {
+      console.error("Hubo un error al cargar los datos:", error);
+      return "Error al cargar";
+    }
+  }
+
+  const Data = document.getElementById("data");
+  Data.innerHTML = "";
+
+  const archivos = [
+    "DataCore.json",
+    "DataAltCore.json",
+    "DataOutliersCore.json",
+    "DataFull.json"
+  ];
+
+  for (const archivo of archivos) {
+    const p = document.createElement("p");
+    p.textContent = await contarDatos(archivo);
+    Data.appendChild(p);
+  }
+}
+
+renderizar();
+
 function mostrarCanciones(lista) {
   contenedor.innerHTML = "";
 
-  /* Largo de la lista es 0, No hay resultados en la lista. */
   if (lista.length === 0) {
     contenedor.innerHTML = `<p class="mensaje-sin-resultados">No se encontraron canciones con esos filtros.</p>`;
     return;
   }
-  
+
   const contador = document.getElementById("contador")
   contador.innerHTML = "";
   const resumen = document.createElement("p");
-  resumen.textContent = `Mostrando ${lista.length} canciones`;
+  resumen.textContent = `Mostrando ${lista.length} canciones de ${baseUsada}`;
   resumen.classList.add("resumen-canciones");
   contador.appendChild(resumen);
 
-  /* Largo de la lista es 1, Agarrar el objeto. */
   if (lista.length === 1) {
     const cancion = lista[0];
     const link = cancion["Spotify Link"];
     const nombre = cancion["Canción"];
 
-    /* Si existe link, y en el link esta la palabra "track/" y sacar el id del link  */
     if (link && link.includes("track/")) {
       const id = link.split("track/")[1].split("?")[0];
       console.log(`Filtro único: "${nombre}", ID de Track: ${id}`);
