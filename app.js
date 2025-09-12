@@ -79,17 +79,6 @@ function mostrarCanciones(lista) {
   resumen.classList.add("resumen-canciones");
   contador.appendChild(resumen);
 
-  if (lista.length === 1) {
-    const cancion = lista[0];
-    const link = cancion["Spotify Link"];
-    const nombre = cancion["Canción"];
-
-    if (link && link.includes("track/")) {
-      const id = link.split("track/")[1].split("?")[0];
-      console.log(`Filtro único: "${nombre}", ID de Track: ${id}`);
-    }
-  }
-
   lista.forEach(cancion => {
     const tarjeta = crearTarjeta(cancion);
     contenedor.appendChild(tarjeta);
