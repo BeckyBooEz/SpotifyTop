@@ -8,7 +8,7 @@ let cancionesCargadas = [];
 
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('./base/Core.json');
+    const respuesta = await fetch('./base/DataCore.json');
 
     if (!respuesta.ok) {
       throw new Error(`Error http: ${respuesta.status}`);
