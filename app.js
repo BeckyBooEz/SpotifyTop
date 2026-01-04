@@ -2,13 +2,15 @@ const contenedor = document.getElementById("contenedor");
 const buscador = document.getElementById("buscador");
 const filtroReproducciones = document.getElementById("filtroReproducciones");
 const filtroMinutos = document.getElementById("filtroMinutos");
+const Datausada = "./base/DataCore.json"
+
 
 let cancionesCargadas = [];
 
 
 async function cargarCanciones() {
   try {
-    const respuesta = await fetch('./base/DataFull.json');
+    const respuesta = await fetch(Datausada);
 
     if (!respuesta.ok) {
       throw new Error(`Error http: ${respuesta.status}`);
