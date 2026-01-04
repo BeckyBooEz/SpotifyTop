@@ -2,8 +2,7 @@ const contenedor = document.getElementById("contenedor");
 const buscador = document.getElementById("buscador");
 const filtroReproducciones = document.getElementById("filtroReproducciones");
 const filtroMinutos = document.getElementById("filtroMinutos");
-const Datausada = "./base/DataCore.json"
-
+const Datausada = "./base/DataAltCore.json";
 
 let cancionesCargadas = [];
 
